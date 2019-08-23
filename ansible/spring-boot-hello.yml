@@ -1,0 +1,50 @@
+---
+
+- name: projeto-exemplo
+  hosts: localhost
+  gather_facts: False
+
+  tasks:
+    - name: clona projeto
+      git:
+        repo: "{{ git_repo }}"
+        dest: /var/tmp/checkout
+        version: "{{ git_branch }}"
+
+    - name: compila projeto
+      shell: mvn clean package dockerfile:build
+      args:
+        chdir: /var/tmp/checkout/
+
+    - name: remove projeto
+      file:
+        path: /var/tmp/checkout
+        state: absent
+
+    - name: ECR login
+      shell: "$(aws --profile {{ aws_profile }} ecr get-login --no-include-email --region {{ region }})"
+      args:
+        executable: /bin/bash
+
+    - name: adiciona tag remota
+      docker_image:
+        name: "{{ project_name }}:{{ docker_tag }}"
+        repository: "{{ ecr_repo }}"
+        tag: "{{ ecr_repo }}:{{ docker_tag }}"
+
+    - name: envia imagem para ECR
+      docker_image:
+        name: "{{ ecr_repo }}:{{ docker_tag }}"
+        push: yes
+
+    - name: remove imagem local
+      docker_image:
+        state: absent
+        name: "{{ project_name }}"
+        tag: "{{ docker_tag }}"
+
+    - name: remove imagem remota
+      docker_image:
+        state: absent
+        name: "{{ ecr_repo }}"
+        tag: "{{ docker_tag }}"
