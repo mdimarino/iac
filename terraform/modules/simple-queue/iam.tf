@@ -1,6 +1,6 @@
 ### POLÍTICAS ###
 resource "aws_iam_policy" "iam_policy" {
-  name        = "${var.application}"
+  name        = var.application
   path        = "/"
   description = "Politica de uso da fila sqs"
 
@@ -28,7 +28,7 @@ EOF
 
 ### FUNÇÔES (ROLES) ###
 resource "aws_iam_role" "iam_role" {
-  name = "${var.application}"
+  name = var.application
 
   assume_role_policy = <<EOF
 {
