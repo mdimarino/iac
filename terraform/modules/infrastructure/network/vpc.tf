@@ -93,32 +93,32 @@ resource "aws_subnet" "private_subnets" {
   }
 }
 
-# resource "aws_eip" "nat_eips" {
-#   count = length(var.public-subnet-cidr-blocks)
-#   vpc   = true
+resource "aws_eip" "nat_eips" {
+  count = length(var.public-subnet-cidr-blocks)
+  vpc   = true
 
-#   tags = {
-#     Name        = "${var.vpc-name}-nat-gateway-ip-0${count.index + 1}"
-#     Environment = var.environment
-#     Billing     = var.billing
-#     Provisioner = var.provisioner
-#   }
-# }
+  tags = {
+    Name        = "${var.vpc-name}-nat-gateway-ip-0${count.index + 1}"
+    Environment = var.environment
+    Billing     = var.billing
+    Provisioner = var.provisioner
+  }
+}
 
-# resource "aws_nat_gateway" "nat_gateways" {
-#   count         = length(var.public-subnet-cidr-blocks)
-#   allocation_id = element(aws_eip.nat_eips.*.id, count.index)
-#   subnet_id     = element(aws_subnet.public_subnets.*.id, count.index)
+resource "aws_nat_gateway" "nat_gateways" {
+  count         = length(var.public-subnet-cidr-blocks)
+  allocation_id = element(aws_eip.nat_eips.*.id, count.index)
+  subnet_id     = element(aws_subnet.public_subnets.*.id, count.index)
 
-#   tags = {
-#     Name        = "${var.vpc-name}-nat-gateway-0${count.index + 1}"
-#     Environment = var.environment
-#     Billing     = var.billing
-#     Provisioner = var.provisioner
-#   }
+  tags = {
+    Name        = "${var.vpc-name}-nat-gateway-0${count.index + 1}"
+    Environment = var.environment
+    Billing     = var.billing
+    Provisioner = var.provisioner
+  }
 
-#   depends_on = [aws_internet_gateway.igw]
-# }
+  depends_on = [aws_internet_gateway.igw]
+}
 
 resource "aws_route_table" "private_route_tables" {
   count  = length(var.private-subnet-cidr-blocks)
@@ -138,12 +138,12 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = element(aws_route_table.private_route_tables.*.id, count.index)
 }
 
-# resource "aws_route" "private_nat_gateway" {
-#   count                  = length(var.private-subnet-cidr-blocks)
-#   route_table_id         = element(aws_route_table.private_route_tables.*.id, count.index)
-#   destination_cidr_block = "0.0.0.0/0"
-#   nat_gateway_id         = element(aws_nat_gateway.nat_gateways.*.id, count.index)
-# }
+resource "aws_route" "private_nat_gateway" {
+  count                  = length(var.private-subnet-cidr-blocks)
+  route_table_id         = element(aws_route_table.private_route_tables.*.id, count.index)
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = element(aws_nat_gateway.nat_gateways.*.id, count.index)
+}
 
 resource "aws_default_route_table" "default_route_table" {
   default_route_table_id = aws_vpc.vpc.default_route_table_id
