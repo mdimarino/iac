@@ -2,7 +2,7 @@
 resource "aws_iam_policy" "iam_policy_read_only" {
   name        = "${var.application}-leitura-somente"
   path        = "/"
-  description = "Politica de somente de leitura no bucket"
+  description = "Politica de somente leitura no bucket"
 
   policy = <<EOF
 {
