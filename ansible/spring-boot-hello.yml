@@ -30,7 +30,7 @@
       docker_image:
         name: "{{ project_name }}:{{ docker_tag }}"
         repository: "{{ ecr_repo }}"
-        tag: "{{ ecr_repo }}:{{ docker_tag }}"
+        tag: "{{ docker_tag }}"
 
     - name: envia imagem para ECR
       docker_image:

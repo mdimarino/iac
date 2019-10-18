@@ -1,4 +1,5 @@
 resource "aws_route53_zone" "vpc_route53_zone" {
+  
   name = var.vpc-name
 
   vpc {

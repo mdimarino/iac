@@ -10,10 +10,19 @@ resource "aws_s3_bucket" "s3_bucket" {
     prevent_destroy = false
   }
 
+  lifecycle_rule {
+    id      = "versionamento"
+    enabled = true
+
+    noncurrent_version_expiration {
+      days = var.s3-versioning-lifecycle-days
+    }
+  }
+
   tags = {
     Name        = "Estado remoto do Terraform"
-    Environment = "${var.environment}"
-    Billing     = "${var.billing}"
+    Environment = var.environment
+    Billing     = var.billing
   }
 }
 

@@ -1,0 +1,30 @@
+
+PLAY [projeto-exemplo] *********************************************************
+
+TASK [clona projeto] ***********************************************************
+changed: [localhost]
+
+TASK [compila projeto] *********************************************************
+changed: [localhost]
+
+TASK [remove projeto] **********************************************************
+changed: [localhost]
+
+TASK [ECR login] ***************************************************************
+changed: [localhost]
+
+TASK [adiciona tag remota] *****************************************************
+changed: [localhost]
+
+TASK [envia imagem para ECR] ***************************************************
+changed: [localhost]
+
+TASK [remove imagem local] *****************************************************
+changed: [localhost]
+
+TASK [remove imagem remota] ****************************************************
+changed: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=8    changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

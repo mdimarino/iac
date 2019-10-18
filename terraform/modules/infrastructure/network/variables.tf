@@ -43,3 +43,8 @@ variable "availability-zones" {
   description = "As zonas de disponibilidade da região"
   type        = list(string)
 }
+
+variable "enable-nat-gateways" {
+  description = "Se verdadeiro NAT Gateways serão criados nas subredes públicas e rotas de saída para as subredes privadas"
+  type        = bool
+}
