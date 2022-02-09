@@ -4,7 +4,7 @@ provider "aws" {
 
   shared_credentials_file = "~/.aws/credentials"
 
-  version = "~> 2.28.1"
+  version = "~> 2.57.0"
 }
 
 terraform {
